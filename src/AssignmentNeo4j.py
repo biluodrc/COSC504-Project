@@ -91,7 +91,7 @@ class Neo4jApp:
 		elif(data_op==1):
 			query1=("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
 		else:
-			query1=("MATCH (c:Crocodile {id:'777'}) -[:CONS]-(r) RETURN COUNT(r);")
+			query1=("MATCH (c:crocodile {id:'777'}) -[:CONS]-(r) RETURN COUNT(r);")
 		result1 = tx.run(query1)
 
 			#return({"MovieInfo": row["Names"]["ReleaseDate"]} for row in result1)
@@ -231,7 +231,7 @@ class Neo4jApp:
 
 if __name__ == "__main__":
 	# Aura queries use an encrypted connection using the "neo4j+s" URI scheme
-	data_option=1#0:squirrel ; 1:
+	data_option= 2#0:squirrel ; 1:chameleon ; 2: crocodile.
 	if data_option==0:
 		data='squirrel'
 	elif data_option==1:
@@ -247,6 +247,6 @@ if __name__ == "__main__":
 	app.query2(data_option)
 	app.query3(data_option)
 	app.query4(data_option)
-	app.query5(data_option)
+	# app.query5(data_option)
 	# app.query6(data_option)
 	app.close()

@@ -28,206 +28,149 @@ class Neo4jApp:
 		# TODO : Complete Method to close the connection to the database
 		self.driver.close()
 
-
-	def loadData(self):
-		# TODO : Write function to load data as per given instructions
-		"""
-		load data as per given instructions
-
-		Keyword arguments:
-		None
-
-		:throws: Exception if an error occurs.
-		"""
-
-		with self.driver.session(database="neo4j") as session:
-			result = session.execute_write(self._load_actor_person)
-			for row in result:
-				print("We created an actor/person ", row)
-	
-
-	@staticmethod
-	def _load_actor_person(tx):
-		query = ("CREATE(I:Actor:Alien{bio: 'Extraterrestrial', born: '1200-01-01', bornIn: 'Mars', name: 'ET'})\n")
-		queryET = ("MATCH(I:Alien)\n"
-					"MATCH(M:Movie {title: 'E.T. the Extra-Terrestrial'})\n"
-				"MERGE(I)- [:ACTED_IN] -> (M)")
-		queryJ = ("MATCH(I:Alien)\n"
-				"MATCH(M:Movie{title:'Jumanji'})\n"
-				"MERGE (I) - [:ACTED_IN] -> (M)")		
-		queryR = (
-		"MATCH(p:Person|User)"
-		"MATCH(M:Movie{title:'Jumanji'})\n"
-		"WHERE ID(p) = 34047\n"
-		"MERGE (p) - [:REVIEWED{rating:90,summary:'It was fun to watch in 3D'}]-> (M)")
-		# result = tx.run(query)
-		# result = tx.run(queryET)
-		# result = tx.run(queryJ)
-		result = tx.run(queryR)
-		try:
-			return [row for row in result] #does not do anything because there is nothing to return, just filler
-		except ServiceUnavailable as ex:
-			logging.error("{query} raised an error: \n {ex}".format(query=query, ex=ex))
-			raise		
-		
-	def query1(self,data_op):
+	def query1(self,data_op, id):
 		"""Returns 
 		"""
-		print("first order query. ")
+		print("***first order query. ")
 		with self.driver.session(database="neo4j") as session:
-			result = session.execute_read(self._query1helper, data_op)
-			#might need a set to avoid dupes
-			# result_tup = ()
-			# for row in result:
-			# 	print(row)
-			print(result)
-			return result
-
-	@staticmethod
-	def _query1helper(tx, data_op):
-		if(data_op==0):
-			query1=("MATCH (c:squirrel {id:'777'}) -[:s_conn]-(r) RETURN COUNT(r);")
+			if(data_op==0):
+				query1=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-(r) RETURN COUNT(r);")
 				#("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
-		elif(data_op==1):
-			query1=("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
-		else:
-			query1=("MATCH (c:crocodile {id:'777'}) -[:CONS]-(r) RETURN COUNT(r);")
-		result1 = tx.run(query1)
+			elif(data_op==1):
+				query1=("MATCH (c:chameleon {id:'"+id+"'})-[:cham_conn]-(r) RETURN count(r);")
+			else:
+				query1=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-(r) RETURN COUNT(r);")
+			
+			result = session.run(query1)
+			print([row for row in result])
+			# Get hte query profile performance.
+			query1_profile="PROFILE "+query1
+			Profile_result = session.run(query1_profile)
+			summary = Profile_result.consume()
+			print(summary.profile)
 
-			#return({"MovieInfo": row["Names"]["ReleaseDate"]} for row in result1)
-		return[row for row in result1]
-	
+			return[row for row in result]
 
 
-	def query2(self,data_op):
+	def query2(self,data_op,id):
 		"""
 		"""
-		print("2nd order query.")
+		print("***2nd order query.")
 		with self.driver.session(database="neo4j") as session:
-			result = session.execute_read(self._query2helper,data_op)
-			#might need a set to avoid dupes
-			print(result)		
-			return result		
-	
-	@staticmethod
-	def _query2helper(tx,data_op):
-		if(data_op==0):
-			query2=("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
+			if(data_op==0):
+				query2=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
+					#("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
+			elif(data_op==1):
+				query2=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 				#("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
-		elif(data_op==1):
-			query2=("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-			#("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
-		else:
-			query2=("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-			#("MATCH (c:Crocodile {id:'777'}) -[:CONS]-(r) RETURN COUNT(r);")
-		result2 = tx.run(query2)
-		return[row for row in result2]
+			else:
+				query2=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+				#("MATCH (c:Crocodile {id:'777'}) -[:CONS]-(r) RETURN COUNT(r);")
+			result = session.run(query2)
+			print([row for row in result])
+
+			# Get hte query profile performance.
+			# query2_profile="PROFILE "+query2
+			# Profile_result = session.run(query2_profile)
+			# summary = Profile_result.consume()
+			# print(summary.profile)
+			return[row for row in result]	
 	
-	def query3(self, data_op):
+	
+	
+	def query3(self, data_op,id):
 		"""
 		"""
-		print("3rd order query.")
+		print("***3rd order query.")
 		with self.driver.session(database="neo4j") as session:
-			result = session.execute_read(self._query3helper, data_op)
-			result_tup = ()
-			#might need a set to avoid dupes
-			print(result)		
-			return result		
+			if(data_op==0):
+				query3=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
+				#("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
+			elif(data_op==1):
+				query3=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+			else:
+				query3=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+				#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+			result = session.run(query3)
+			print([row for row in result])
+			
+			# Get hte query profile performance.
+			# query3_profile="PROFILE "+query3
+			# Profile_result = session.run(query3_profile)
+			# summary = Profile_result.consume()
+			# print(summary.profile)
+		return [row for row in result]			
 	
-	@staticmethod
-	def _query3helper(tx, data_op):
-		if(data_op==0):
-			query3=("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-			#("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-		elif(data_op==1):
-			query3=("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-			#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-		else:
-			query3=("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-			#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-		result3 = tx.run(query3)
+	
 
-		return[row for row in result3]
-
-	def query4(self,data_op):
+	def query4(self,data_op,id):
 		"""
 		"""
 		print("4th order query.")
 		with self.driver.session(database="neo4j") as session:
-			result = session.execute_read(self._query4helper,data_op)
-			result_tup = ()
-			#might need a set to avoid dupes
-			print(result)		
-			return result		
-	
-	@staticmethod
-	def _query4helper(tx,data_op):
-		if(data_op==0):
-			query4=("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-			#MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);
-		elif(data_op==1):
-			query4=("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-			#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-		else:
-			query4=("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-			#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-		result4 = tx.run(query4)
-		# summary = result4.consume()
-		# print(summary.profile)
-		return[row for row in result4]
+			if(data_op==0):
+				query4=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
+				#MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);
+			elif(data_op==1):
+				query4=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+			else:
+				query4=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+			result = session.run(query4)
+			print([row for row in result])
 
-	def query5(self,data_op):
+			# Get hte query profile performance.
+			query4_profile="PROFILE "+query4
+			Profile_result = session.run(query4_profile)
+			summary = Profile_result.consume()
+			print(summary.profile)
+		return [row for row in result]			
+
+	def query5(self,data_op,id):
 		"""
 		"""
 		print("5th order query.")
 		with self.driver.session(database="neo4j") as session:
-			result = session.execute_read(self._query5helper,data_op)
-			#might need a set to avoid dupes
-			print(result)		
-			return result		
-	
-	@staticmethod
-	def _query5helper(tx,data_op):
-		if(data_op==0):
-			query5=("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-		elif(data_op==1):
-			query5=("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-			#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-		else:
-			query5=("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-			#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-		result5 = tx.run(query5)
-		# summary = result4.consume()
-		# print(summary.profile)
-		return[row for row in result5]
+			if(data_op==0):
+				query5=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
+			elif(data_op==1):
+				query5=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+			else:
+				query5=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+			result = session.run(query5)
+			print([row for row in result])
 
-	def query6(self,data_op):
+			# Get hte query profile performance.
+			# query5_profile="PROFILE "+query5
+			# Profile_result = session.run(query5_profile)
+			# summary = Profile_result.consume()
+			# print(summary.profile)
+		return [row for row in result]			
+	
+	def query6(self,data_op,id):
 		"""
 		"""
-		print("6th order query.")
+		print("***6th order query.")
 		with self.driver.session(database="neo4j") as session:
-			result = session.execute_read(self._query6helper,data_op)
-			#might need a set to avoid dupes
-			print(result)		
-			return result		
-	
-	@staticmethod
-	def _query6helper(tx,data_op):
-		if(data_op==0):
-			query6=("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-		elif(data_op==1):
-			query6=("MATCH (c:squirrel {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-			#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
-		else:
-			query6=("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-			#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
-		result6 = tx.run(query6)
-		# summary = result4.consume()
-		# print(summary.profile)
-		return[row for row in result6]
+			if(data_op==0):
+				query6=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
+			elif(data_op==1):
+				query6=("MATCH (c:squirrel {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+			else:
+				query6=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+				#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+			result = session.run(query6)
+			print([row for row in result])
 
-
-
+			#Get hte query profile performance.
+			query6_profile="PROFILE "+query6
+			Profile_result = session.run(query6_profile)
+			summary = Profile_result.consume()
+			print(summary.profile)
+		return [row for row in result]			
 
 if __name__ == "__main__":
 	# Aura queries use an encrypted connection using the "neo4j+s" URI scheme
@@ -240,13 +183,15 @@ if __name__ == "__main__":
 		data='crocodile'
 	app = Neo4jApp()
 	app.connect()
+	# which id 
+	id = '777' # which user to experiment.
 
 	print("===== Data set",data, ".=====")
 	#app.loadData() # Run only once to avoid duplicate data.
-	app.query1(data_option)
-	app.query2(data_option)
-	app.query3(data_option)
-	app.query4(data_option)
+	app.query1(data_option,id)
+	app.query2(data_option,id)
+	app.query3(data_option,id)
+	app.query4(data_option,id)
 	# app.query5(data_option)
 	# app.query6(data_option)
 	app.close()

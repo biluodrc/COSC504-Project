@@ -2,6 +2,8 @@ from neo4j import GraphDatabase
 import logging
 from neo4j.exceptions import ServiceUnavailable
 import re
+import sys
+
 class Neo4jApp:
 
 	# Replace this with your personal uri, user (default: neo4j), password
@@ -170,7 +172,9 @@ class Neo4jApp:
 
 if __name__ == "__main__":
 	# Aura queries use an encrypted connection using the "neo4j+s" URI scheme
-	data_option= 2 #0:squirrel ; 1:chameleon ; 2: crocodile.
+	data_option= sys.argv[1] #0:squirrel ; 1:chameleon ; 2: crocodile.
+	# which id 
+	id = sys.argv[2] # which user to experiment.
 	if data_option==0:
 		data='squirrel'
 	elif data_option==1:
@@ -179,8 +183,6 @@ if __name__ == "__main__":
 		data='crocodile'
 	app = Neo4jApp()
 	app.connect()
-	# which id 
-	id = '777' # which user to experiment.
 
 	print("===== Data set",data, ".=====")
 	#app.loadData() # Run only once to avoid duplicate data.

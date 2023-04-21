@@ -3,6 +3,7 @@ import logging
 from neo4j.exceptions import ServiceUnavailable
 import re
 import sys
+import time
 
 class Neo4jApp:
 
@@ -32,8 +33,8 @@ class Neo4jApp:
 		self.driver.close()
 
 	def query1(self,data_op, id):
+		print("***1st order query.")
 		# Returns the 1st order query.
-		print("***first order query. ")
 		with self.driver.session(database="neo4j") as session:
 			if(data_op==0):
 				query1=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-(r) RETURN COUNT(r);")
@@ -45,19 +46,20 @@ class Neo4jApp:
 			
 			result = session.run(query1)
 			print([row for row in result])
-			# Get hte query profile performance.
+
+			#Get hte query profile performance.
 			query1_profile="PROFILE "+query1
 			Profile_result = session.run(query1_profile)
 			summary = Profile_result.consume()
-			print(summary.profile)
+			print(summary.profile['args']['string-representation'])
 
 			return[row for row in result]
 
 
 	def query2(self,data_op,id):
-		# Run the 2nd order query.
+		print("***2rd order query.")
 
-		print("***2nd order query.")
+		# Run the 2nd order query.
 		with self.driver.session(database="neo4j") as session:
 			if(data_op==0):
 				query2=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
@@ -68,21 +70,22 @@ class Neo4jApp:
 			else:
 				query2=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
 				#("MATCH (c:Crocodile {id:'777'}) -[:CONS]-(r) RETURN COUNT(r);")
+			
 			result = session.run(query2)
 			print([row for row in result])
 
 			# Get hte query profile performance.
-			# query2_profile="PROFILE "+query2
-			# Profile_result = session.run(query2_profile)
-			# summary = Profile_result.consume()
-			# print(summary.profile)
+			query2_profile="PROFILE "+query2
+			Profile_result = session.run(query2_profile)
+			summary = Profile_result.consume()
+			print(summary.profile['args']['string-representation'])
 			return[row for row in result]	
 	
 	
 	
 	def query3(self, data_op,id):
-		# Run the 3rd order query.
 		print("***3rd order query.")
+		# Run the 3rd order query.
 		with self.driver.session(database="neo4j") as session:
 			if(data_op==0):
 				query3=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
@@ -93,20 +96,22 @@ class Neo4jApp:
 			else:
 				query3=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
 				#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+
 			result = session.run(query3)
-			print([row for row in result])	
+			print([row for row in result])
+
 			# Get hte query profile performance.
-			# query3_profile="PROFILE "+query3
-			# Profile_result = session.run(query3_profile)
-			# summary = Profile_result.consume()
-			# print(summary.profile)
+			query3_profile="PROFILE "+query3
+			Profile_result = session.run(query3_profile)
+			summary = Profile_result.consume()
+			print(summary.profile['args']['string-representation'])
 		return [row for row in result]			
 	
 	
 
 	def query4(self,data_op,id):
+		print("***4th order query.")
 		# Run the 4th order query.
-		print("4th order query.")
 		with self.driver.session(database="neo4j") as session:
 			if(data_op==0):
 				query4=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
@@ -116,20 +121,20 @@ class Neo4jApp:
 				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 			else:
 				query4=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+
 			result = session.run(query4)
 			print([row for row in result])
 
 			# Get hte query profile performance.
-			# query4_profile="PROFILE "+query4
-			# Profile_result = session.run(query4_profile)
-			# summary = Profile_result.consume()
-			# print(summary.profile)
+			query4_profile="PROFILE "+query4
+			Profile_result = session.run(query4_profile)
+			summary = Profile_result.consume()
+			print(summary.profile['args']['string-representation'])
 		return [row for row in result]			
 
 	def query5(self,data_op,id):
 		# Run the 5th order query.
-
-		print("5th order query.")
+		print("***5th order query.")
 		with self.driver.session(database="neo4j") as session:
 			if(data_op==0):
 				query5=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
@@ -138,19 +143,20 @@ class Neo4jApp:
 				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 			else:
 				query5=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+
 			result = session.run(query5)
 			print([row for row in result])
 
 			# Get hte query profile performance.
-			# query5_profile="PROFILE "+query5
-			# Profile_result = session.run(query5_profile)
-			# summary = Profile_result.consume()
-			# print(summary.profile)
+			query5_profile="PROFILE "+query5
+			Profile_result = session.run(query5_profile)
+			summary = Profile_result.consume()
+			print(summary.profile['args']['string-representation'])
 		return [row for row in result]			
 	
 	def query6(self,data_op,id):
-		# Run the 6th order query.
 		print("***6th order query.")
+		# Run the 6th order query.
 		with self.driver.session(database="neo4j") as session:
 			if(data_op==0):
 				query6=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
@@ -160,14 +166,15 @@ class Neo4jApp:
 			else:
 				query6=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
 				#("MATCH (c:crocodile {id:'777'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
+	
 			result = session.run(query6)
 			print([row for row in result])
 
 			#Get the query profile performance.
-			# query6_profile="PROFILE "+query6
-			# Profile_result = session.run(query6_profile)
-			# summary = Profile_result.consume()
-			# print(summary.profile)
+			query6_profile="PROFILE "+query6
+			Profile_result = session.run(query6_profile)
+			summary = Profile_result.consume()
+			print(summary.profile['args']['string-representation'])
 		return [row for row in result]			
 
 if __name__ == "__main__":
@@ -190,6 +197,6 @@ if __name__ == "__main__":
 	app.query2(data_option,id)
 	app.query3(data_option,id)
 	app.query4(data_option,id)
-	# app.query5(data_option)
-	# app.query6(data_option)
+	app.query5(data_option,id)
+	app.query6(data_option,id)
 	app.close()

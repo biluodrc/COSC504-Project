@@ -36,10 +36,9 @@ class Neo4jApp:
 		print("***1st order query.")
 		# Returns the 1st order query.
 		with self.driver.session(database="neo4j") as session:
-			if(data_op==0):
+			if(data_op=='0'):
 				query1=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-(r) RETURN COUNT(r);")
-				#("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
-			elif(data_op==1):
+			elif(data_op=='1'):
 				query1=("MATCH (c:chameleon {id:'"+id+"'})-[:cham_conn]-(r) RETURN count(r);")
 			else:
 				query1=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-(r) RETURN COUNT(r);")
@@ -49,6 +48,7 @@ class Neo4jApp:
 
 			#Get hte query profile performance.
 			query1_profile="PROFILE "+query1
+			print(query1_profile)
 			Profile_result = session.run(query1_profile)
 			summary = Profile_result.consume()
 			print(summary.profile['args']['string-representation'])
@@ -61,10 +61,11 @@ class Neo4jApp:
 
 		# Run the 2nd order query.
 		with self.driver.session(database="neo4j") as session:
-			if(data_op==0):
+			if(data_op=='0'):
+				print("WOOWOWOOW")
 				query2=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
 					#("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
-			elif(data_op==1):
+			elif(data_op=='1'):
 				query2=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 				#("MATCH (c:chameleon {id:'777'})-[:cham_conn]-(r) RETURN count(r);")
 			else:
@@ -87,10 +88,11 @@ class Neo4jApp:
 		print("***3rd order query.")
 		# Run the 3rd order query.
 		with self.driver.session(database="neo4j") as session:
-			if(data_op==0):
+			if(data_op=='0'):
+				print("WOOWOWOOW")
 				query3=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
 				#("MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-			elif(data_op==1):
+			elif(data_op=='1'):
 				query3=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 			else:
@@ -113,10 +115,10 @@ class Neo4jApp:
 		print("***4th order query.")
 		# Run the 4th order query.
 		with self.driver.session(database="neo4j") as session:
-			if(data_op==0):
+			if(data_op=='0'):
 				query4=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
 				#MATCH (c:squirrel {id:'777'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);
-			elif(data_op==1):
+			elif(data_op=='1'):
 				query4=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 			else:
@@ -136,9 +138,9 @@ class Neo4jApp:
 		# Run the 5th order query.
 		print("***5th order query.")
 		with self.driver.session(database="neo4j") as session:
-			if(data_op==0):
+			if(data_op=='0'):
 				query5=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-			elif(data_op==1):
+			elif(data_op=='1'):
 				query5=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 			else:
@@ -158,10 +160,10 @@ class Neo4jApp:
 		print("***6th order query.")
 		# Run the 6th order query.
 		with self.driver.session(database="neo4j") as session:
-			if(data_op==0):
+			if(data_op=='0'):
 				query6=("MATCH (c:squirrel {id:'"+id+"'}) -[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn]-()-[:s_conn] -(r) RETURN COUNT(r);")
-			elif(data_op==1):
-				query6=("MATCH (c:squirrel {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
+			elif(data_op=='1'):
+				query6=("MATCH (c:chameleon {id:'"+id+"'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 				#("MATCH (c:chameleon {id:'777'}) -[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn]-()-[:cham_conn] -(r) RETURN COUNT(r);")
 			else:
 				query6=("MATCH (c:crocodile {id:'"+id+"'}) -[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS]-()-[:CONS] -(r) RETURN COUNT(r);")
@@ -182,9 +184,9 @@ if __name__ == "__main__":
 	data_option= sys.argv[1] #0:squirrel ; 1:chameleon ; 2: crocodile.
 	# which id 
 	id = sys.argv[2] # which user to experiment.
-	if data_option==0:
+	if data_option=='0':
 		data='squirrel'
-	elif data_option==1:
+	elif data_option=='1':
 		data ='chameleon'
 	else:
 		data='crocodile'
@@ -198,5 +200,5 @@ if __name__ == "__main__":
 	app.query3(data_option,id)
 	app.query4(data_option,id)
 	app.query5(data_option,id)
-	app.query6(data_option,id)
+	#app.query6(data_option,id)
 	app.close()

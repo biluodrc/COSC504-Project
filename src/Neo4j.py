@@ -7,8 +7,8 @@ import time
 
 class Neo4jApp:
 
-	# Replace this with your personal uri, user (default: neo4j), password
-	uri = "neo4j+s://a08d43bb.databases.neo4j.io:7687" #"neo4j+s://<Bolt url for Neo4j Aura instance>"
+	# Put your credential information here
+	uri = "neo4j+s://a08d43bb.databases.neo4j.io:7687"
 	user = "neo4j"
 	password = "l1YG5-qlGGqYqiePSRj_da8ucOAadbruhgsjgoVSTn8"
 

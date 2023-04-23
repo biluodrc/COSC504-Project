@@ -197,8 +197,8 @@ class Neo4jApp:
 			#whether to profile your query
 			if(profile == '1'):
 				#Get the query profile performance.
-				query6_profile="PROFILE "+data_o
-				Profile_result = session.run(query6_profile)
+				data_profile="PROFILE "+data_o
+				Profile_result = session.run(data_profile)
 				summary = Profile_result.consume()
 				print(summary.profile['args']['string-representation'])
 		return [row for row in result]	

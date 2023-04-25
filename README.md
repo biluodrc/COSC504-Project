@@ -14,8 +14,4 @@ The last argument 0 indicates whether we want to look into the query plan, and 0
 
 Note that when you want to run the query on a particular dataset, you need to `reset to blank` before you upload the corresponding dataset because there is a node and relationship limitation in neo4j auraDB.
 
-
-
-## OrientDB 
-
-## ArangoDB
+## AllegroDB

@@ -15,3 +15,36 @@ The last argument 0 indicates whether we want to look into the query plan, and 0
 Note that when you want to run the query on a particular dataset, you need to `reset to blank` before you upload the corresponding dataset because there is a node and relationship limitation in neo4j auraDB.
 
 ## AllegroDB
+
+### Build Environment
+Supposing you have a the Docker client. Run the following script to build a AllegroGraph Database environment:
+
+''
+docker pull franzinc/agraph 
+''
+
+Then run the agraph container and open http://localhost:10035/ in your browser.
+
+First, we need to build a repository named COSC504 by running the code 'main.py'.
+
+Second, insert data into the repository: 
+
+1. Open http://localhost:10035/ in your browser; 
+
+![image](https://user-images.githubusercontent.com/44452689/234490338-7fef4e13-d6f2-4094-8190-4f17167b5250.png)
+
+2. select Repositories COSC 504;
+
+![image](https://user-images.githubusercontent.com/44452689/234490423-a0eebf5e-b9b9-44f5-8747-dd726a38ef4c.png)
+
+3. Import RDF: from an uploaded file, including chameleon.rdf, crocodile.rdf, and squirrel.rdf. (Choose format as Turtle)
+
+![image](https://user-images.githubusercontent.com/44452689/234490484-7d663601-6002-4e5c-adbd-bc81ff8d9144.png)
+
+### Test Query Performance
+
+Run 'Query.py' to get the query performance for each database.
+
+![image](https://user-images.githubusercontent.com/44452689/234491332-e8a7ea60-4a00-4609-be89-497faf25b94e.png)
+
+**Experiments log is shown on 'log' file.**

@@ -1,0 +1,23 @@
+Query 1: squirrel, 6, 42.6
+Query 1: chameleon, 27, 18.1
+Query 1: crocodile, 6, 16.8
+Query 2: squirrel, 6, 42.5
+Query 2: chameleon, 27, 36.8
+Query 2: crocodile, 6, 22.9
+Query 3: squirrel, 422, 50.2
+Query 3: chameleon, 159, 69.6
+Query 3: crocodile, 550, 28.0
+Query 4: squirrel, 1026, 2327.2
+Query 4: chameleon, 253, 3261.8
+Query 4: crocodile, 1364, 178.6
+
+Query 5:
+squirrel: 1,128.789
+777: 455.578    2041:   319:1802
+1529    ---     1700
+chameleon: 605.66
+777: 922.668    2041: 455.652   319:
+291   211     ---
+crocodile: 5,241.458
+777: 351.374    2041: 9859   319: 5514
+1858    2340    2440

@@ -38,4 +38,3 @@ conn = my_repository.getConnection()
 print('Repository %s is up!' % my_repository.getDatabaseName())
 print('It contains %d statement(s).' % conn.size())
 
-# load data into the repository

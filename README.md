@@ -17,28 +17,24 @@ Note that when you want to run the query on a particular dataset, you need to `r
 ## AllegroDB
 
 ### Build Environment
-Supposing you have a the Docker client. Run the following script to build a AllegroGraph Database environment:
+
+Assuming that you have the Docker client installed, run the following script to build an AllegroGraph Database environment:
 
 ''
 docker pull franzinc/agraph 
 ''
 
-Then run the agraph container and open http://localhost:10035/ in your browser.
+Then, run the agraph container and open http://localhost:10035/ in your browser.
 
 First, we need to build a repository named COSC504 by running the code 'main.py'.
 
-Second, insert data into the repository: 
+Second, insert data into the repository:
 
-1. Open http://localhost:10035/ in your browser; 
-
+Open http://localhost:10035/ in your browser.
 ![image](https://user-images.githubusercontent.com/44452689/234490338-7fef4e13-d6f2-4094-8190-4f17167b5250.png)
-
-2. select Repositories COSC 504;
-
+Select Repositories -> COSC 504.
 ![image](https://user-images.githubusercontent.com/44452689/234490423-a0eebf5e-b9b9-44f5-8747-dd726a38ef4c.png)
-
-3. Import RDF: from an uploaded file, including chameleon.rdf, crocodile.rdf, and squirrel.rdf. (Choose format as Turtle)
-
+Import RDF from an uploaded file, including chameleon.rdf, crocodile.rdf, and squirrel.rdf. Choose format as Turtle.
 ![image](https://user-images.githubusercontent.com/44452689/234490484-7d663601-6002-4e5c-adbd-bc81ff8d9144.png)
 
 ### Test Query Performance
